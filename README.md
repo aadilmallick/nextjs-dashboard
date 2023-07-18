@@ -1,34 +1,166 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# My learning
 
-## Getting Started
+## Schema
 
-First, run the development server:
+```javascript
+model Project {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  name        String
+  description String?
+  due         DateTime?
+  tasks        Task[]
+  // soft delete: only flag the items so we can ignore it on queries. Don't actually delete
+  deleted     Boolean   @default(false)
+
+  @@unique([ownerId, name]) // no two projects can have the same combination of ownerId and name
+  @@index([ownerId, id]) // create composite index with ownerId and project id
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- We often add a `deleted` property to our database for soft deletion, where instead of deleting from the database irrecoverably, we instead flag the item as "deleted", ignoring it in our filtering queries. This way the user can undelete an item whenever he wants.
+- The `@@unique` block attribute creates a combination of fields saying that the combination must be unique. In this case, no two projects can have the same combination of ownerId and name, essentially saying no projects with the same owner can have the same name.
+- The `@@index` helps with performance, by setting up prisma to efficiently query the specified fields.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Seeding the database
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Seed script
 
-## Learn More
+Create a `seed.ts` next to your database script
 
-To learn more about Next.js, take a look at the following resources:
+```javascript
+import { hashPassword } from "./auth";
+import { prisma as db } from "./db";
+import { TASK_STATUS } from "@prisma/client";
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+const getRandomTaskStatus = () => {
+  const statuses = [
+    TASK_STATUS.COMPLETED,
+    TASK_STATUS.NOT_STARTED,
+    TASK_STATUS.STARTED,
+  ];
+  return statuses[Math.floor(Math.random() * statuses.length)];
+};
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+async function main() {
+  // create a user, with 5 projects, and 10 tasks per project
+  const user = await db.user.upsert({
+    where: { email: "user@email.com" },
+    update: {},
+    create: {
+      email: "user@email.com",
+      firstName: "User",
+      lastName: "Person",
+      password: await hashPassword("password"),
+      projects: {
+        create: new Array(5).fill(1).map((_, i) => ({
+          name: `Project ${i}`,
+          due: new Date(2022, 11, 25),
+        })),
+      },
+    },
+    include: {
+      projects: true,
+    },
+  });
 
-## Deploy on Vercel
+  // for each project, create 10 tasks, each with a random status
+  const tasks = await Promise.all(
+    user.projects.map((project) =>
+      db.task.createMany({
+        data: new Array(10).fill("only care about index").map((_, i) => {
+          return {
+            name: `Task ${i}`,
+            ownerId: user.id,
+            projectId: project.id,
+            description: `Everything that describes Task ${i}`,
+            status: getRandomTaskStatus(),
+          };
+        }),
+      })
+    )
+  );
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  console.log({ user, tasks });
+}
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+// disconnect from the database
+main()
+  .then(async () => {
+    await db.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await db.$disconnect();
+    process.exit(1);
+  });
+```
+
+### tsconfig seed script
+
+To run the seed script, we have to use `ts-node`. To use that, we need to create a `tsconfig.json` just for our seed script, calling it `tsconfig-seed.json`
+
+```bash
+npm i -D ts-node
+```
+
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/components/*": ["./components/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/styles/*": ["./styles/*"],
+      "@/prisma/*": ["./prisma/*"],
+      "@/assets/*": ["./assets/*"]
+    }
+  },
+  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}
+```
+
+You can then add this script to your `package.json`, and check your prisma database using `npx prisma studio`:
+
+```json
+{
+  "scripts": {
+    "seed": "ts-node -P tsconfig-seed.json -r tsconfig-paths/register --transpileOnly src/lib/seed.ts"
+  }
+}
+```
+
+## Authentication
+
+### Hashing passwords
+
+```bash
+npm i bcrypt
+npm i --save-dev @types/bcrypt
+```
