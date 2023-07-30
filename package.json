@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate client && next build",
     "start": "next start",
     "lint": "next lint",
     "seed": "ts-node -P tsconfig-seed.json -r tsconfig-paths/register --transpileOnly src/lib/seed.ts"
