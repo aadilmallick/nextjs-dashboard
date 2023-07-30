@@ -33,12 +33,12 @@ export default async function Page() {
   const user = await getUser();
   const projects = await getProjects(user.id);
   return (
-    <div className="h-full overflow-y-auto flex-1 px-2">
-      <div className=" h-full  items-stretch justify-center min-h-[content]">
+    <div className="h-full overflow-y-auto flex-1">
+      <div className=" h-full  items-stretch justify-center min-h-[content] md:px-2">
         <div className="flex-1 grow flex">
           <Greetings user={user} />
         </div>
-        <div className="grid grid-cols-2 gap-8 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4 px-2">
           {/** projects map here */}
           {projects.map((project) => (
             <Link href={`/project/${project.id}`} key={project.id}>
@@ -47,11 +47,11 @@ export default async function Page() {
               </Suspense>
             </Link>
           ))}
-          <div className="w-1/3 p-3">
+          <div className="p-3 justify-self-center">
             <NewProject />
           </div>
         </div>
-        <div className="mt-6 flex-2 grow w-full flex">
+        <div className="mt-6 flex-2 grow w-full flex px-2">
           <div className="w-full">
             <TaskList id={user.id} title="Today" />
           </div>

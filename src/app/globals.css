@@ -8,6 +8,24 @@
   }
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 90%;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(243, 241, 241);
+  border-radius: 4px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(233, 223, 223);
+  border-radius: 4px;
+}
+
 * {
   box-sizing: border-box;
 }

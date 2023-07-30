@@ -1,8 +1,17 @@
+import { Task } from "@prisma/client";
+
 interface FetcherProps {
-  url: "/api/register" | "/api/signin" | "/api/project";
+  url:
+    | `/api/project/${string}`
+    | "/api/register"
+    | "/api/signin"
+    | "/api/project"
+    | "/api/task"
+    | `/api/task/${string}`;
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: any;
   json?: boolean;
+  apiId?: string;
 }
 
 export interface IRegisterBody {
@@ -11,6 +20,31 @@ export interface IRegisterBody {
   firstName: string;
   lastName: string;
 }
+
+export async function fetcher({
+  url,
+  method,
+  body,
+  json,
+}: {
+  url: `/api/project/${string}`;
+  method: "PATCH";
+  body: { name: string; due?: string; id: string };
+  json?: boolean;
+}): Promise<any>;
+
+// most general on top
+export async function fetcher({
+  url,
+  method,
+  body,
+  json,
+}: {
+  url: `/api/project/${string}`;
+  method: "DELETE";
+  body: { id: string };
+  json?: boolean;
+}): Promise<any>;
 
 export async function fetcher({
   url,
@@ -45,6 +79,54 @@ export async function fetcher({
   url: "/api/project";
   method: "POST";
   body: { name: string };
+  json?: boolean;
+}): Promise<any>;
+
+export async function fetcher({
+  url,
+  method,
+  body,
+  json,
+}: {
+  url: "/api/task";
+  method: "POST";
+  body: {
+    name: string;
+    description?: string;
+    projectId: string;
+    status?: Task["status"];
+  };
+  json?: boolean;
+}): Promise<any>;
+
+export async function fetcher({
+  url,
+  method,
+  body,
+  json,
+}: {
+  url: `/api/task/${string}`;
+  method: "PATCH";
+  body: {
+    name?: string;
+    description?: string;
+    id: string;
+    status?: Task["status"];
+  };
+  json?: boolean;
+}): Promise<any>;
+
+export async function fetcher({
+  url,
+  method,
+  body,
+  json,
+}: {
+  url: `/api/task/${string}`;
+  method: "DELETE";
+  body: {
+    id: string;
+  };
   json?: boolean;
 }): Promise<any>;
 

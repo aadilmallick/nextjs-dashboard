@@ -8,7 +8,7 @@ const projectWithTasks = Prisma.validator<Prisma.ProjectArgs>()({
 
 type ProjectWithTasks = Prisma.ProjectGetPayload<typeof projectWithTasks>;
 
-const formatDate = (date: Date) =>
+export const formatDate = (date: Date) =>
   new Date(date).toLocaleDateString("en-us", {
     weekday: "long",
     year: "numeric",
@@ -23,9 +23,12 @@ const ProjectCard = ({ project }: { project: ProjectWithTasks }) => {
   const progress = Math.ceil((completedCount / project.tasks.length) * 100);
   return (
     <div className="!px-6 !py-8 hover:scale-105 transition-all ease-in-out duration-200 card">
-      <div>
+      <div className="flex justify-between items-center flex-wrap">
         <span className="text-sm text-gray-300">
           {formatDate(project.createdAt)}
+        </span>
+        <span className="text-sm text-red-300">
+          {project.due && formatDate(project.due)}
         </span>
       </div>
       <div className="mb-6">

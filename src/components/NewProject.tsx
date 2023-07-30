@@ -6,6 +6,8 @@ import Input from "./Input";
 import { fetcher } from "@/lib/api";
 import { useRouter } from "next/navigation";
 
+Modal.setAppElement("#modal");
+
 const NewProject = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);

@@ -11,6 +11,7 @@ const SignOutButton = () => {
       },
       body: JSON.stringify({}),
     });
+    console.log("signed out");
     // window.location.href = "/signin";
   }
   return <Button onClick={handleSignOut}>Sign Out</Button>;

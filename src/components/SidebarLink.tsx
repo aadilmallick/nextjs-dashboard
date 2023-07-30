@@ -28,9 +28,9 @@ const SidebarLink = ({ link }: SidebarLinkProps) => {
   return (
     <Link
       href={link.link}
-      className="hover:bg-gray-200 transition-colors p-4 rounded-lg"
+      className="hover:bg-gray-200  transition-colors p-4 rounded-lg"
     >
-      <Icon size={40} color={isActive ? "#0000ff" : "#eeeeee"} />
+      <Icon size={40} color={isActive ? "#0000ff" : "gray"} />
     </Link>
   );
 };

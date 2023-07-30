@@ -7,8 +7,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="h-screen candy-mesh p-8">
-      <GlassPane className="w-[90vw] mx-auto h-full p-4 flex gap-4">
+    <section className="h-screen candy-mesh md:p-8">
+      <GlassPane className="w-full md:w-[90vw] mx-auto h-full p-4 flex gap-4">
         <Sidebar />
         {children}
       </GlassPane>
