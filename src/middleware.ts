@@ -9,7 +9,19 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(request.nextUrl.href);
   }
 
+  const unAuthPaths = ["/signin", "/register", "/"];
+
+  if (request.nextUrl.pathname === "/" && !jwt) {
+    request.nextUrl.pathname = "/signin";
+    return NextResponse.redirect(request.nextUrl.href);
+  }
+
   if (request.nextUrl.pathname === "/") {
+    request.nextUrl.pathname = "/home";
+    return NextResponse.redirect(request.nextUrl.href);
+  }
+
+  if (request.nextUrl.pathname in unAuthPaths) {
     request.nextUrl.pathname = "/home";
     return NextResponse.redirect(request.nextUrl.href);
   }

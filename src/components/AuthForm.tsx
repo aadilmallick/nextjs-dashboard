@@ -62,9 +62,11 @@ const AuthForm = ({ mode }: AuthFormProps) => {
 
     try {
       if (mode === "register") {
-        await register(formState);
+        const res = await register(formState);
+        console.log(res);
       } else {
-        await signin(formState);
+        const res = await signin(formState);
+        console.log(res);
       }
       // can't go back to previous page after. Good for auth flow stuff
       router.replace("/home");

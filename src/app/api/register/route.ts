@@ -1,5 +1,10 @@
 import { IRegisterBody } from "@/lib/api";
-import { IUser, comparePasswords, generateToken } from "@/lib/auth";
+import {
+  IUser,
+  comparePasswords,
+  generateToken,
+  hashPassword,
+} from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
@@ -20,7 +25,7 @@ export async function POST(req: NextRequest) {
   const user = await prisma.user.create({
     data: {
       email,
-      password,
+      password: await hashPassword(password),
       lastName,
       firstName,
     },

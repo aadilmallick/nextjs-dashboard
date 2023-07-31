@@ -6,8 +6,10 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="h-screen rainbow-mesh p-8">
-      <GlassPane className="w-[90vw] mx-auto h-full">{children}</GlassPane>
+    <section className="min-h-screen rainbow-mesh p-8">
+      <GlassPane className="w-[90vw] mx-auto h-full pb-12">
+        {children}
+      </GlassPane>
     </section>
   );
 }
