@@ -1,4 +1,3 @@
-import React from "react";
 import { Prisma, TASK_STATUS } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import Button from "./Button";
@@ -6,6 +5,8 @@ import TaskStatus from "./TaskStatus";
 import CreateNewTaskButton from "./CreateNewTaskButton";
 import { FaEdit } from "react-icons/fa";
 import EditTaskButton from "./EditTaskButton";
+import SingleTask from "./SingleTask";
+import DragDropTaskList from "./DragDropTaskList";
 
 async function getTasks(id: string) {
   const tasks = await prisma.task.findMany({
@@ -38,6 +39,7 @@ const TaskList = async ({
   projectId?: string;
 }) => {
   const tasks = tasksDB || (id && (await getTasks(id)));
+
   return (
     <div className="card max-h-[80%] relative overflow-y-auto">
       <div className="flex flex-wrap justify-between items-center">
@@ -55,30 +57,7 @@ const TaskList = async ({
         </div>
       </div>
       {tasks && tasks.length ? (
-        <div>
-          {tasks.map((task) => (
-            <div
-              className="p-2 hover:bg-gray-200 transition-colors rounded-md cursor-pointer relative group"
-              key={task.id}
-            >
-              <EditTaskButton
-                id={task.id}
-                description={task.description || ""}
-                name={task.name}
-                status={task.status}
-              />
-              <div className="flex flex-wrap justify-between items-center">
-                <span className="text-gray-800">{task.name}</span>
-                <TaskStatus status={task.status} />
-              </div>
-              <div>
-                <span className="text-gray-400 text-sm">
-                  {task.description}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <DragDropTaskList tasks={tasks} />
       ) : (
         <div>no tasks</div>
       )}

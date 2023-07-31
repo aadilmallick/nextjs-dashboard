@@ -52,9 +52,6 @@ const EditTaskButton = ({
       },
     });
     closeModal();
-    setTaskName("");
-    setTaskDescription("");
-    setTaskStatus("NOT_STARTED");
     router.refresh();
   };
 
@@ -105,9 +102,10 @@ const EditTaskButton = ({
             value={taskName}
             onChange={(e) => setTaskName(e.target.value)}
           />
-          <Input
+          <textarea
             placeholder="task description"
             value={taskDescription}
+            className="w-full h-48 border border-gray-200 p-2"
             onChange={(e) => setTaskDescription(e.target.value)}
           />
           <Select
