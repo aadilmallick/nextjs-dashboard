@@ -8,6 +8,8 @@ import { formatDate } from "@/components/ProjectCard";
 import { notFound } from "next/navigation";
 import { Project, Task } from "@prisma/client";
 
+export const revalidate = 0;
+
 interface Props {
   params: {
     id: string;
@@ -68,11 +70,5 @@ const Stats = ({ tasks }: { tasks: Task[] }) => {
     </ul>
   );
 };
-// TODO: add generateStaticParams
-
-export async function generateStaticParams() {
-  const projects = await prisma.project.findMany();
-  return projects.map((project) => ({ params: { id: project.id } }));
-}
 
 export default page;
