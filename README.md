@@ -404,6 +404,14 @@ const fetcher = async ({ url, method, body, json = true }: FetcherProps) => {
 };
 ```
 
+### Using function overloads
+
+We can also use template literal strings for typing in typescript, which is really useful to represent dynamics, like so:
+
+```typescript
+const url = `http://localhost:3000/api/${string}`;
+```
+
 ## Authentication
 
 ### Hashing passwords
@@ -434,12 +442,33 @@ You cannot use tailwind with template strings, since tailwind can only evaluate 
 
 ## React modal
 
+1. Installation
+
 ```bash
 npm i react-modal
 npm i --save-dev @types/react-modal
 ```
 
-Create a `<div>` with an id of "modal" so react-modal can use it as a portal.
+2. Create an element at the top of your app that will serve as a portal for the modal to be rendered into. We don't have to do any of the portal logic ourselves, all we have to do is create the element and give it an id of our choosing.
+
+```javascript
+export default function DashboardLayout({ children }) {
+  return (
+    // ...
+    <div id="modal"></div>
+  );
+}
+```
+
+3. Before using the modal, register the element we want to use as the portal.
+   - In the example below, we register the element with an id of `modal` as our modal
+
+```javascript
+import Modal from "react-modal";
+Modal.setAppElement("#modal");
+```
+
+Now all you need to do is create modal state, which is controlled by the `isOpen` prop, and create a modal component.
 
 ```javascript
 import React from "react";
@@ -447,10 +476,147 @@ import Modal from "react-modal";
 
 // these are the props you can pass on react modal
 interface ModalProps {
-  isOpen: boolean;
-  onRequestClose: () => void;
+  isOpen: boolean; // whether the modal is open or not
+  onRequestClose: () => void; // function to close the modal
   children: React.ReactNode;
-  overlayClassName: string;
-  className: string;
+  overlayClassName: string; // overlay styling
+  className: string; // modal container styling.
 }
+
+const App = () => {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
+  return (
+    <>
+      {/* ...other component */}
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        overlayClassName="bg-[rgba(0,0,0,.4)] flex justify-center items-center absolute top-0 left-0 h-screen w-screen"
+        className="w-1/2 bg-white rounded-xl p-8 relative"
+      >
+        <h1>Modal</h1>
+        {/* ...nested content */}
+      </Modal>
+    </>
+  );
+};
+```
+
+## Drag and drop
+
+Make any elements you want to drag as draggable, by setting the HTML attribute `draggable` to `true` on any elements you want to drag.
+
+```javascript
+<div draggable="true" />
+```
+
+Add event listeners for the drag events on the element you want to drag. The `dragstart` event is fired when the user starts dragging a draggable element. In this event, make sure to transfer any data that you want to transfer to the drop target.
+
+```javascript
+<div
+  draggable="true"
+  onDragStart={(e) => {
+    console.log("drag start");
+  }}
+/>
+```
+
+For any elements you want to make droppable, listen for the `onDragOver` event and make sure to prevent the default event behavior, which is to prevent dragging over.
+
+```javascript
+<div
+  onDragOver={(e) => {
+    e.preventDefault();
+  }}
+/>
+```
+
+Listen for the `onDrop` event, and make sure to prevent the default event behavior, which is to prevent dropping. In this event, you can access the data transferred from the drag event and use that to do stuff like reordering lists or the such.
+
+```javascript
+<div
+  onDrop={(e) => {
+    e.preventDefault();
+    console.log("dropped");
+  }}
+/>
+```
+
+### Full example
+
+```javascript
+  const [theTasks, setTheTasks] = useState<Task[]>(tasks);
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, targetId: string) => {
+    e.preventDefault();
+    const sourceId = e.dataTransfer.getData("text/plain");
+
+    // source: the thing you're dragging.
+    // target: the thing you're dragging to.
+
+    // Find the index of the source task and the target task in the tasks array
+    const sourceIndex = theTasks.findIndex((task) => task.id === sourceId);
+    const targetIndex = theTasks.findIndex((task) => task.id === targetId);
+
+    // Create a new array to hold the updated order of tasks
+    const newTasks = [...theTasks];
+
+    // Remove the source task from its original position
+    const [sourceTask] = newTasks.splice(sourceIndex, 1);
+
+    // Insert the source task into its new position
+    newTasks.splice(targetIndex, 0, sourceTask);
+
+    // Update the state with the new order of tasks
+    setTheTasks(newTasks);
+  };
+```
+
+```javascript
+// makes all tasks draggable and droppable for reordering
+<div
+  // make element draggable
+  draggable
+  // make transfer data available to drop target under data type key text/plain
+  onDragStart={(e) => {
+    e.dataTransfer.setData("text/plain", task.id);
+  }}
+  // prevent default dragover behavior. This allows dragging over
+  onDragOver={(e) => {
+    e.preventDefault();
+  }}
+  // prevent default drop behavior. This allows dropping. Now use transfered data to reorder elements in list
+  onDrop={(e) => {
+    handleDrop(e, task.id);
+  }}
+/>
+```
+
+## Skeleton with tailwind css
+
+```javascript
+const GreetingsSkeleton = () => {
+  return (
+    <div className="w-full card py-14">
+      <div className="animate-pulse flex space-x-4">
+        {/* profile picture*/}
+        <div className="rounded-full bg-gray-300 h-10 w-10"></div>
+        {/* bars */}
+        <div className="flex-1 space-y-6 py-1">
+          <div className="h-2 bg-gray-300 rounded"></div>
+          <div className="space-y-3">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="h-2 bg-gray-300 rounded col-span-2"></div>
+              <div className="h-2 bg-gray-300 rounded col-span-1"></div>
+            </div>
+            <div className="h-2 bg-gray-300 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 ```

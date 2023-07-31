@@ -7,12 +7,28 @@ import EditProjectName from "./EditProjectName";
 import { formatDate } from "@/components/ProjectCard";
 import { notFound } from "next/navigation";
 import { Project, Task } from "@prisma/client";
+import { Metadata } from "next";
 
 export const revalidate = 0;
 
 interface Props {
   params: {
     id: string;
+  };
+}
+
+type MetaDataProps = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata({
+  params: { id },
+}: Props): Promise<Metadata> {
+  const project = await getProject(id);
+  return {
+    title: `My Dashboard | ${project?.name}` || "Project not found",
+    icons: ["./favicon.ico"],
   };
 }
 
