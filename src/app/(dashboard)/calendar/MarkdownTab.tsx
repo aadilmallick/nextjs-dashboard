@@ -8,10 +8,12 @@ import "prismjs/components";
 import "prismjs/themes/prism-twilight.css";
 
 const MarkdownTab = () => {
-  const [markdown, setMarkdown] = useState(
-    localStorage.getItem("markdown") || "## markdown preview"
-  );
+  const [markdown, setMarkdown] = useState("## markdown preview");
   const [showPreview, setShowPreview] = useState(false);
+
+  useEffect(() => {
+    setMarkdown(localStorage.getItem("markdown") || "");
+  }, []);
 
   const hiddenPreviewContent = () => {
     if (showPreview) {
