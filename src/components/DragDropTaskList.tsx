@@ -21,7 +21,7 @@ const ClientTaskList = ({
 }) => {
   const [theTasks, setTheTasks] = useState<Task[]>(tasks);
   const projectId = tasks[0].projectId;
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // useLayoutEffect(() => {
   //   if (!isProjectView) return;
@@ -36,7 +36,10 @@ const ClientTaskList = ({
   // }, [isProjectView, projectId, theTasks.length]);
 
   useEffect(() => {
-    if (!isProjectView) return;
+    if (!isProjectView) {
+      setLoading(false);
+      return;
+    }
     const storedOrder = localStorage.getItem(`taskOrder/${projectId}`);
     if (storedOrder) {
       const taskOrder = JSON.parse(storedOrder);
