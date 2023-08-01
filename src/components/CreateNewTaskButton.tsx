@@ -46,7 +46,7 @@ const CreateNewTaskButton = ({ id }: ICreateNewTaskButtonProps) => {
     setTaskName("");
     setTaskDescription("");
     setTaskStatus("NOT_STARTED");
-    router.refresh();
+    window.location.reload();
   };
 
   return (

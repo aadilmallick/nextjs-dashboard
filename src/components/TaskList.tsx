@@ -8,6 +8,8 @@ import EditTaskButton from "./EditTaskButton";
 import SingleTask from "./SingleTask";
 import DragDropTaskList from "./DragDropTaskList";
 
+// TODO: implement state change for task list by passing in setTasks to create task modal
+
 async function getTasks(id: string) {
   const tasks = await prisma.task.findMany({
     where: { ownerId: id, NOT: { status: TASK_STATUS.COMPLETED } },

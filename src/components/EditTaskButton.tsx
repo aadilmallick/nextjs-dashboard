@@ -52,7 +52,7 @@ const EditTaskButton = ({
       },
     });
     closeModal();
-    router.refresh();
+    window.location.reload();
   };
 
   async function deleteTask() {
@@ -67,7 +67,7 @@ const EditTaskButton = ({
       },
     });
 
-    router.refresh();
+    window.location.reload();
   }
 
   return (
