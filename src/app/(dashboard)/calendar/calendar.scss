@@ -1,0 +1,132 @@
+$primary: #8138b7;
+
+#markdown-output {
+  /*  global settings */
+  font-size: 18px;
+  line-height: 1.6;
+
+  ::selection {
+    color: white;
+    background: $primary;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-transform: capitalize;
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  h3 {
+    font-size: 1.75rem;
+  }
+  h4 {
+    font-size: 1.4rem;
+  }
+
+  p {
+    margin-top: 1.7rem;
+    margin-bottom: 1.7rem;
+  }
+
+  // other elements
+
+  p code {
+    background-color: whitesmoke;
+    color: rgb(212, 8, 1);
+    padding: 0 6px;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 900px;
+    object-fit: cover;
+    margin-bottom: 3rem;
+  }
+  blockquote {
+    font-size: 1.15rem;
+    font-style: italic;
+    border-left: 5px solid $primary;
+    color: var(--clr-grey-5);
+    padding-left: 1rem;
+    line-height: 2;
+    margin-bottom: 1.5rem;
+    ul {
+      list-style-type: none;
+      margin-left: 1rem;
+      font-style: normal;
+      margin-top: -1rem;
+    }
+    li::before {
+      content: "-";
+      margin-left: -5px;
+    }
+  }
+
+  blockquote ::first-letter {
+    text-transform: uppercase;
+  }
+  //   pre {
+  //     background: #222;
+  //     display: inline-block;
+  //     border-radius: 15px;
+  //     padding: 1rem 2rem;
+  //     color: yellow;
+  //     margin-bottom: 1.5rem;
+  //     max-width: 800px;
+  //     overflow-x: auto;
+  //     box-shadow: 0px 10px 8px 2px #22222236;
+  //   }
+
+  ul {
+    list-style-type: disc;
+    margin-left: 2rem;
+  }
+
+  ol {
+    list-style-type: decimal;
+    margin-left: 2rem;
+  }
+
+  hr {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 2rem;
+    }
+    h2 {
+      font-size: 1.75rem;
+    }
+    h3 {
+      font-size: 1.5rem;
+    }
+    h4 {
+      font-size: 1.25rem;
+    }
+  }
+
+  .code-block {
+    position: relative;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #f1f1f1;
+    border: none;
+    cursor: pointer;
+  }
+}
