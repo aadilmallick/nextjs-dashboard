@@ -146,6 +146,7 @@ export async function fetcher({ url, method, body, json }: FetcherProps) {
 
   if (json) {
     const data = await res.json();
+    // console.log(data);
     return data;
   }
 }

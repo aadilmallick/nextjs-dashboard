@@ -32,7 +32,7 @@ const CreateNewTaskButton = ({ id }: ICreateNewTaskButtonProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // await createNewProject(name);
-    await fetcher({
+    const body = await fetcher({
       url: "/api/task",
       method: "POST",
       body: {
@@ -41,11 +41,21 @@ const CreateNewTaskButton = ({ id }: ICreateNewTaskButtonProps) => {
         projectId: id,
         status: taskStatus,
       },
+      json: true,
     });
+    console.log(body);
     closeModal();
     setTaskName("");
     setTaskDescription("");
     setTaskStatus("NOT_STARTED");
+    const taskIds = localStorage.getItem(`taskOrder/${id}`);
+    console.log("in create task", taskIds);
+    if (taskIds) {
+      localStorage.setItem(
+        `taskOrder/${id}`,
+        JSON.stringify([...JSON.parse(taskIds), body.id])
+      );
+    }
     window.location.reload();
   };
 

@@ -36,6 +36,7 @@ const SingleTask = ({
         description={task.description || ""}
         name={task.name}
         status={task.status}
+        projectId={task.projectId}
       />
       <div className="flex flex-wrap justify-between items-center">
         <span className="text-gray-800">{task.name}</span>
@@ -45,6 +46,7 @@ const SingleTask = ({
         <span className="text-gray-400 text-sm line-clamp-3">
           {task.description}
         </span>
+        <p>{task.id}</p>
       </div>
     </div>
   );

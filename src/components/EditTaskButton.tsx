@@ -20,6 +20,7 @@ interface IEditTaskButtonProps {
   name: string;
   status: Task["status"];
   description: string;
+  projectId?: string;
 }
 
 Modal.setAppElement("#modal");
@@ -29,6 +30,7 @@ const EditTaskButton = ({
   description,
   name,
   status,
+  projectId,
 }: IEditTaskButtonProps) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
@@ -65,8 +67,15 @@ const EditTaskButton = ({
       body: {
         id,
       },
+      json: true,
     });
 
+    const taskIds = localStorage.getItem(`taskOrder/${projectId}`);
+
+    if (taskIds) {
+      const ids = JSON.parse(taskIds).filter((taskId: string) => taskId !== id);
+      localStorage.setItem(`taskOrder/${projectId}`, JSON.stringify(ids));
+    }
     window.location.reload();
   }
 

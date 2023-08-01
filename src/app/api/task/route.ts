@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     status: Task["status"];
   } = await request.json();
 
-  await prisma.task.create({
+  const thing = await prisma.task.create({
     data: {
       name,
       description,
@@ -32,5 +32,5 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  return NextResponse.json({ success: true }, { status: 200 });
+  return NextResponse.json({ ...thing }, { status: 200 });
 }

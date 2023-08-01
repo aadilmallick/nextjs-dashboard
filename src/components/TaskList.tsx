@@ -59,7 +59,7 @@ const TaskList = async ({
         </div>
       </div>
       {tasks && tasks.length ? (
-        <DragDropTaskList tasks={tasks} />
+        <DragDropTaskList tasks={tasks} isProjectView={id ? false : true} />
       ) : (
         <div>no tasks</div>
       )}

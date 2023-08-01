@@ -1,13 +1,14 @@
 import NewProject from "@/components/NewProject";
 import TaskList, { Tasks } from "@/components/TaskList";
 import { prisma } from "@/lib/db";
-import React from "react";
+import React, { Suspense } from "react";
 import DeleteProjectButton from "./DeleteProjectButton";
 import EditProjectName from "./EditProjectName";
 import { formatDate } from "@/components/ProjectCard";
 import { notFound } from "next/navigation";
 import { Project, Task } from "@prisma/client";
 import { Metadata } from "next";
+import GreetingsSkeleton from "@/components/GreetingsSkeleton";
 
 export const revalidate = 0;
 
@@ -48,11 +49,13 @@ const page = async ({ params: { id } }: Props) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-16">
       <div>
-        <TaskList
-          title={project!.name}
-          tasksDB={project?.tasks as Tasks}
-          projectId={id}
-        />
+        <Suspense fallback={<GreetingsSkeleton />}>
+          <TaskList
+            title={project!.name}
+            tasksDB={project?.tasks as Tasks}
+            projectId={id}
+          />
+        </Suspense>
         <DeleteProjectButton id={id} />
       </div>
       <div>
