@@ -61,7 +61,12 @@ const CreateNewTaskButton = ({ id }: ICreateNewTaskButtonProps) => {
 
   return (
     <>
-      <Button intent="text" className="text-violet-600" onClick={openModal}>
+      <Button
+        intent="text"
+        className="text-violet-600"
+        onClick={openModal}
+        size={"small"}
+      >
         + Create New
       </Button>
       <Modal

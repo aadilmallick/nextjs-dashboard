@@ -47,8 +47,8 @@ const page = async ({ params: { id } }: Props) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-16">
-      <div>
+    <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-12 h-full">
+      <div className="h-full flex flex-col overflow-y-auto">
         <Suspense fallback={<GreetingsSkeleton />}>
           <TaskList
             title={project!.name}

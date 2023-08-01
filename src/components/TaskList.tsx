@@ -43,10 +43,10 @@ const TaskList = async ({
   const tasks = tasksDB || (id && (await getTasks(id)));
 
   return (
-    <div className="card max-h-[80%] relative overflow-y-auto">
-      <div className="flex flex-wrap justify-between items-center">
+    <div className="card relative">
+      <div className="flex flex-wrap justify-between items-center pb-2 border-b-2">
         <div className="flex-shrink-0">
-          <span className="text-3xl text-gray-600">{title}</span>
+          <span className="text-2xl text-gray-600">{title}</span>
         </div>
         <div>
           {/* if tasks exist, and we are not passing in user id, but instead project tasks */}

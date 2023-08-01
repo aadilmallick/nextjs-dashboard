@@ -46,7 +46,6 @@ const SingleTask = ({
         <span className="text-gray-400 text-sm line-clamp-3">
           {task.description}
         </span>
-        <p>{task.id}</p>
       </div>
     </div>
   );

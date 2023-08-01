@@ -24,7 +24,7 @@ const links = [
 const Sidebar = () => {
   //
   return (
-    <div className="card w-16 md:w-36 h-full grid grid-cols-1 items-center justify-items-center">
+    <div className="card w-16 md:w-24 xl:w-30 2xl:w-36 h-full grid grid-cols-1 items-center justify-items-center">
       {links.map((link) => (
         <SidebarLink link={link} key={link.label} />
       ))}

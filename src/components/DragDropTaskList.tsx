@@ -88,7 +88,7 @@ const ClientTaskList = ({
   }
 
   return (
-    <div>
+    <div className="max-h-96 overflow-y-auto">
       {theTasks.map((task) => {
         if (!task) {
           return null;
