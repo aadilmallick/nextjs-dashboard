@@ -1,3 +1,4 @@
+import DailyTaskList from "@/components/DailyTaskList";
 import Greetings from "@/components/Greetings";
 import GreetingsSkeleton from "@/components/GreetingsSkeleton";
 import NewProject from "@/components/NewProject";
@@ -5,6 +6,7 @@ import ProjectCard from "@/components/ProjectCard";
 import TaskList from "@/components/TaskList";
 import { IUser, decodeToken } from "@/lib/auth";
 import { prisma as db } from "@/lib/db";
+import { TASK_STATUS } from "@prisma/client";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -29,9 +31,22 @@ const getProjects = async (id: string) => {
   return projects;
 };
 
+const getTasks = async (id: string) => {
+  const tasks = await db.task.findMany({
+    where: { ownerId: id, NOT: { status: TASK_STATUS.COMPLETED } },
+    orderBy: {
+      due: "asc",
+    },
+  });
+  return tasks;
+};
+
 export default async function Page() {
   const user = await getUser();
-  const projects = await getProjects(user.id);
+  const [projects, tasks] = await Promise.all([
+    getProjects(user.id),
+    getTasks(user.id),
+  ]);
   return (
     <div className="h-full overflow-y-auto flex-1">
       <div className=" h-full  items-stretch justify-center min-h-[content] md:px-2">
@@ -53,7 +68,8 @@ export default async function Page() {
         </div>
         <div className="mt-6 flex-2 grow w-full flex px-2">
           <div className="w-full">
-            <TaskList id={user.id} title="Today" />
+            {/* <TaskList id={user.id} title="Today" /> */}
+            <DailyTaskList tasks={tasks} />
           </div>
         </div>
       </div>

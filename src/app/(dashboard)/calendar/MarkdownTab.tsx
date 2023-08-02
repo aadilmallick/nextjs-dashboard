@@ -21,7 +21,7 @@ const MarkdownTab = () => {
     }
     return (
       <textarea
-        className="p-1 pt-8 w-full h-[80%] overflow-auto text-gray-700 bg-gray-100 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+        className="p-1 pt-8 w-full h-[90%] overflow-auto text-gray-700 bg-gray-100 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
         value={markdown}
         onChange={(e) => {
           setMarkdown(e.target.value);

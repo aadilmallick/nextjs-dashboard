@@ -14,7 +14,7 @@ const SingleTask = ({
   handleDrop,
 }: {
   task: Task;
-  handleDrop: HandleDrop;
+  handleDrop?: HandleDrop;
 }) => {
   return (
     <div
@@ -28,6 +28,7 @@ const SingleTask = ({
         e.preventDefault();
       }}
       onDrop={(e) => {
+        if (!handleDrop) return;
         handleDrop(e, task.id);
       }}
     >
