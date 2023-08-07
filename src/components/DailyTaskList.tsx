@@ -33,6 +33,7 @@ const DailyTaskList = ({ tasks }: { tasks: Task[] }) => {
           menuPlacement="top"
           placeholder="tasks"
           isMulti
+          isSearchable
           value={selectedTasks.map((task) => ({
             value: task,
             label: task.name,
