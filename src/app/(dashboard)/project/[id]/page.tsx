@@ -47,8 +47,8 @@ const page = async ({ params: { id } }: Props) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-12 h-full">
-      <div className="h-full flex flex-col overflow-y-auto">
+    <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-12 h-full overflow-y-auto">
+      <div className="h-full flex flex-col lg:overflow-y-auto">
         <Suspense fallback={<GreetingsSkeleton />}>
           <TaskList
             title={project!.name}
@@ -58,16 +58,15 @@ const page = async ({ params: { id } }: Props) => {
         </Suspense>
         <DeleteProjectButton id={id} />
       </div>
-      <div>
-        <div className="card">
-          <h1 className="text-3xl font-bold mb-4">Edit Project</h1>
-          <span className="text-sm block mb-8">
-            Created: {formatDate(project.createdAt)}
-          </span>
-          <EditProjectName project={project!} />
-          <div className="border-gray-200 border-t-2 my-4"></div>
-          {project.tasks.length > 0 && <Stats tasks={project.tasks} />}
-        </div>
+
+      <div className="card">
+        <h1 className="text-3xl font-bold mb-4">Edit Project</h1>
+        <span className="text-sm block mb-8">
+          Created: {formatDate(project.createdAt)}
+        </span>
+        <EditProjectName project={project!} />
+        <div className="border-gray-200 border-t-2 my-4"></div>
+        {project.tasks.length > 0 && <Stats tasks={project.tasks} />}
       </div>
     </div>
   );

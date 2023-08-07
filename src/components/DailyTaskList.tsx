@@ -21,30 +21,48 @@ const DailyTaskList = ({ tasks }: { tasks: Task[] }) => {
     }
   }, [tasks]);
 
+  const getSelectedTasks = () => {
+    const theTasks = selectedTasks.map((task) => {
+      if (!task) {
+        console.log("task is null selected tasks");
+        return null;
+      }
+      return {
+        value: task,
+        label: task.name,
+      };
+    });
+
+    return theTasks.filter((task) => task !== null);
+    // TODO: possibly set local storage here as well
+  };
+
   return (
     <div className="card">
       <div className="flex gap-8 items-center">
         <h3 className="text-2xl">Todays Todos</h3>
         <Select
-          options={tasks.map((task) => ({
-            value: task,
-            label: task.name,
-          }))}
+          options={tasks.map((task) => {
+            if (!task) {
+              console.log("task is null");
+            }
+            return {
+              value: task,
+              label: task.name,
+            };
+          })}
           menuPlacement="top"
           placeholder="tasks"
           isMulti
           isSearchable
-          value={selectedTasks.map((task) => ({
-            value: task,
-            label: task.name,
-          }))}
+          value={getSelectedTasks()}
           className="flex-1"
           onChange={(e) => {
             // console.log(e);
-            setSelectedTasks(e.map((task) => task.value));
+            setSelectedTasks(e.map((task) => task!.value));
             localStorage.setItem(
               "dailyTasks",
-              JSON.stringify(e.map((task) => task.value.id))
+              JSON.stringify(e.map((task) => task!.value.id))
             );
           }}
         />
@@ -53,9 +71,9 @@ const DailyTaskList = ({ tasks }: { tasks: Task[] }) => {
         {/* {selectedTasks.length > 0 && (
           <DragDropTaskList tasks={selectedTasks} isProjectView={false} />
         )} */}
-        {selectedTasks.map((task) => (
-          <SingleTask task={task} key={task.id} />
-        ))}
+        {selectedTasks.map(
+          (task) => task && <SingleTask task={task} key={task.id} />
+        )}
       </div>
     </div>
   );

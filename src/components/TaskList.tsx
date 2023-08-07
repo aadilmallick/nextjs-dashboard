@@ -44,7 +44,7 @@ const TaskList = async ({
 
   return (
     <div className="card relative">
-      <div className="flex flex-wrap justify-between items-center pb-2 border-b-2">
+      <div className="flex flex-wrap justify-between items-center pb-2 border-b-2 -mx-4">
         <div className="flex-shrink-0">
           <span className="text-2xl text-gray-600">{title}</span>
         </div>
