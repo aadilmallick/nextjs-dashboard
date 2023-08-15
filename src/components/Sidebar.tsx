@@ -56,8 +56,8 @@ const Sidebar = () => {
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        overlayClassName="bg-[rgba(0,0,0,.4)] flex justify-center items-center absolute top-0 left-0 h-screen w-screen"
-        className="w-1/2 bg-white rounded-xl p-2 flex justify-center items-center"
+        overlayClassName="bg-[rgba(0,0,0,.4)] absolute top-0 left-0 h-screen w-screen flex justify-center items-start"
+        className="w-1/2 bg-white rounded-xl p-2 flex justify-center items-center mt-12"
       >
         <div className="card w-8 h-full grid grid-cols-1 items-center justify-items-center">
           {links.map((link) => (
